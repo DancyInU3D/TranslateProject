@@ -12,6 +12,11 @@ namespace Translante
     {
         static List<UnityEngine.Object> m_list;
         int? m_removeIndex;
+        [MenuItem("翻译/检查翻译文件key是否重复")]
+        public static void CheckKeyRepeat()
+        {
+            DoCheckKeyRepeat();
+        }
 
         [MenuItem("翻译/提取/预制的中文")]
         public static void GetPrefabChinese()
@@ -19,24 +24,25 @@ namespace Translante
             DoGetFromPrefab();
         }
 
-        [MenuItem("翻译/提取/单个预制的中文")]
-        public static void GetSinglePrefab()
-        {
-            Translate wnd = GetWindow<Translate>("提取单个预制的中文");
-            wnd.Init();
-        }
+        //[MenuItem("翻译/提取/单个预制的中文")]
+        //public static void GetSinglePrefab()
+        //{
+        //    Translate wnd = GetWindow<Translate>("提取单个预制的中文");
+        //    wnd.Init();
+        //}
 
-        [MenuItem("翻译/提取/代码的中文")]
-        public static void GetCodeChinese()
-        {
-            ExcuteGetMonoScript();
-        }
+        //[MenuItem("翻译/提取/代码的中文")]
+        //public static void GetCodeChinese()
+        //{
+        //    ExcuteGetMonoScript();
+        //}
 
         [MenuItem("翻译/导入/预制翻译表格")]
         public static void ImportChinese()
         {
             ImportPrefabTranslate();
         }
+
         void Init()
         {
             m_list = new List<UnityEngine.Object>() { null };
@@ -86,6 +92,35 @@ namespace Translante
         }
 
 
+        public static void DoCheckKeyRepeat()
+        {
+            string allPath = EditorUtility.OpenFilePanel("请选择导出的本地化文件", "", "");
+            List<string> existList = new List<string>();
+            int count = 0;
+            using (var fileStream = new FileStream(allPath, FileMode.Open, FileAccess.Read))
+            {
+                using (var excel = new ExcelPackage(fileStream))
+                {
+                    var sheet = excel.Workbook.Worksheets[1];
+                    if (sheet != null && sheet.Dimension != null)
+                    {
+                        for (int r = 2; r <= sheet.Dimension.End.Row; r++)
+                        {
+                            string key = sheet.Cells[r, 1].Value.ToString();
+                            if (existList.Contains(key))
+                            {
+                                UnityEngine.Debug.Log("这个key重复了: " + key);
+                                count++;
+                            }
+                            else
+                                existList.Add(key);
+                        }
+                    }
+                }
+
+            }
+            Debug.Log("检查完毕，重复key的个数为" + count);
+        }
 
 
         private static void WriteExcel(string folder, List<string> list)
@@ -120,8 +155,8 @@ namespace Translante
                 {
                     var sheet = excel.Workbook.Worksheets.Add("UnlocalizedText");
                     var row = 2;
-                    sheet.Cells[1, 2].Value = "Chinese";
-                    sheet.Cells[1, 3].Value = "Translation";
+                    sheet.Cells[1, 1].Value = "Chinese";
+                    sheet.Cells[1, 2].Value = "Translation";
                     int sum = dic.Count;
                     int index = 0;
                     foreach (var item in dic)
@@ -133,8 +168,8 @@ namespace Translante
                     }
                     excel.Save();
                 }
+                EditorUtility.ClearProgressBar();
             }
-            EditorUtility.ClearProgressBar();
         }
 
         private static void FindCompents<T>(string subFolder, Action<T> action)

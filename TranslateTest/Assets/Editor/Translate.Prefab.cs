@@ -13,7 +13,6 @@ namespace Translante
 {
     public partial class Translate
     {
-
         /// <summary>
         /// 查找所有预制文件夹下的prefab
         /// </summary>
@@ -29,6 +28,28 @@ namespace Translante
 
             Dictionary<string, string> dic = new Dictionary<string, string>();
 
+            string allPath = EditorUtility.OpenFilePanel("请选择导出的本地化文件", "", "");
+            if (!(!string.IsNullOrEmpty(allPath) && File.Exists(allPath)))
+                return;
+            HashSet<string> existList = new HashSet<string>();
+            //先读取翻译文件
+            using (var fileStream = new FileStream(allPath, FileMode.Open, FileAccess.Read))
+            {
+                using (var excel = new ExcelPackage(fileStream))
+                {
+                    var sheet = excel.Workbook.Worksheets[1];
+                    if (sheet != null && sheet.Dimension != null)
+                    {
+                        for (int r = 2; r <= sheet.Dimension.End.Row; r++)
+                        {
+                            existList.Add(sheet.Cells[r, 1].Value.ToString());
+                        }
+                    }
+                }
+
+            }
+
+            //找ngui预制中文
             for (int i = 0; i < pathes.Count; i++)
             {
                 GetComponentsForPath<UILabel>(pathes[i], "t:Prefab", uiLabel =>
@@ -37,43 +58,57 @@ namespace Translante
                     string subText;
                     (text, subText) = FormatTexts(text);
 
-                    if (!uiLabel.name.StartsWith("_@")
-                        && !string.IsNullOrEmpty(text)
+                    if (!string.IsNullOrEmpty(text)
                         && ContainsChinese(text)
-                        && !dic.ContainsKey(text))
+                        && !dic.ContainsKey(text)
+                        && !existList.Contains(text))
                     {
-                        dic.Add(text, text);
+                        dic.Add(text, string.Empty);
                     }
                 });
             }
 
-
+            //找ugui预制中文
             GetComponentsForPath<Text>("Assets/U", "t:Prefab", uiLabel =>
             {
                 string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
                 string subText;
                 (text, subText) = FormatTexts(text);
 
-                if (!uiLabel.name.StartsWith("_@")
-                    && !string.IsNullOrEmpty(text)
+                if (!string.IsNullOrEmpty(text)
                     && ContainsChinese(text)
-                    && !dic.ContainsKey(text))
+                    && !dic.ContainsKey(text)
+                    && !existList.Contains(text))
                 {
-                    dic.Add(text, text);
+                    dic.Add(text, string.Empty);
                 }
             });
 
-            string path = Application.dataPath + "/PrefabTranslate.xlsx";
-            if (!File.Exists(path))
-            {
-                File.CreateText(path).Dispose();
-            }
-            else
-                File.Delete(path);
-            WriteExcel(Application.dataPath + "/PrefabTranslate.xlsx", dic);
+            WriteBehind(allPath, dic);
 
             EditorUtility.ClearProgressBar();
         }
+
+        private static void WriteBehind(string folder, Dictionary<string, string> dic)
+        {
+            using (ExcelPackage excel = new ExcelPackage(new FileInfo(folder)))
+            {
+                var sheet = excel.Workbook.Worksheets[1];
+                int sum = dic.Count;
+                int index = sheet.Dimension.End.Row + 1;
+                foreach (var item in dic)
+                {
+                    sheet.Cells[index, 1].Value = item.Key;
+                    sheet.Cells[index, 2].Value = item.Value;
+                    EditorUtility.DisplayProgressBar("正在导出翻译文件", "loading...", index / sum);
+                    index++;
+                }
+                excel.Save();
+            }
+            EditorUtility.ClearProgressBar();
+
+        }
+
 
         /// <summary>
         /// 查找单个预制身上的lable
@@ -120,7 +155,7 @@ namespace Translante
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            string allPath = EditorUtility.OpenFilePanel("请选择翻译好的本地化文件", "", "");
+            string allPath = EditorUtility.OpenFilePanel("请选择翻译好的excel文件", "", "");
             if (!(!string.IsNullOrEmpty(allPath) && File.Exists(allPath)))
                 return;
             //var ext = Path.GetExtension(allPath);
@@ -133,25 +168,21 @@ namespace Translante
             {
                 using (var excel = new ExcelPackage(fileStream))
                 {
-                    for (var i = 1; i <= excel.Workbook.Worksheets.Count; i++)
+                    var sheet = excel.Workbook.Worksheets[1];
+                    if (sheet != null && sheet.Dimension != null)
                     {
-                        var sheet = excel.Workbook.Worksheets[i];
-                        if (sheet == null || sheet.Dimension == null)
-                            continue;
-
                         for (int r = 2; r <= sheet.Dimension.End.Row; r++)
                         {
-                            string key = sheet.Cells[r, 2].Value.ToString();
+                            string key = sheet.Cells[r, 1].Value.ToString();
                             if (TempDic.ContainsKey(key)) continue;
-                            if (sheet.Cells[r, 3].Value != null)
+                            if (sheet.Cells[r, 2].Value != null)
                             {
                                 keylist.Add(key);
-                                translist.Add(sheet.Cells[r, 3].Value.ToString());
-                                TempDic.Add(key, sheet.Cells[r, 3].Value.ToString());
+                                translist.Add(sheet.Cells[r, 2].Value.ToString());
+                                TempDic.Add(key, sheet.Cells[r, 2].Value.ToString());
                             }
 
                         }
-
                     }
                 }
             }
