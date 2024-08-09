@@ -2,44 +2,66 @@ using OfficeOpenXml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace Translante
 {
     public partial class Translate
     {
-        static string PrefabFilePath = "/UIPrefab/uiprefab.txt";
 
-        static Dictionary<string, string> TempDic;
-        static Dictionary<string, string> FileDic;
-
-        static List<string> translist;
-        static List<string> keylist;
-        static List<string> allPrefabList;
-
-        static MD5 s_md5Obj;
-        static MD5 MD5Obj
-        {
-            get { return s_md5Obj ?? (s_md5Obj = MD5.Create()); }
-        }
         /// <summary>
         /// 查找所有预制文件夹下的prefab
         /// </summary>
-        public static void ExtractFromPrefab()
+        public static void DoGetFromPrefab()
         {
-            Stopwatch sw = Stopwatch.StartNew();
-            TempDic = new Dictionary<string, string>();
 
-            string[] pathes = Directory.GetDirectories("Assets/UIPrefab");
-            allPrefabList = new List<string>();
-            for (int i = 0; i < pathes.Length; i++)
+            List<string> pathes = new List<string>
             {
-                GetComponentsForPath<UILabel>(pathes[i], "t:Prefab", AddTranlate);
+            "Assets/UIPrefab/UI_Basic",
+            "Assets/UIPrefab/UI_New",
+            "Assets/UIPrefab/UI_Offline"
+            };
+
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            for (int i = 0; i < pathes.Count; i++)
+            {
+                GetComponentsForPath<UILabel>(pathes[i], "t:Prefab", uiLabel =>
+                {
+                    string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
+                    string subText;
+                    (text, subText) = FormatTexts(text);
+
+                    if (!uiLabel.name.StartsWith("_@")
+                        && !string.IsNullOrEmpty(text)
+                        && ContainsChinese(text)
+                        && !dic.ContainsKey(text))
+                    {
+                        dic.Add(text, text);
+                    }
+                });
             }
+
+
+            GetComponentsForPath<Text>("Assets/U", "t:Prefab", uiLabel =>
+            {
+                string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
+                string subText;
+                (text, subText) = FormatTexts(text);
+
+                if (!uiLabel.name.StartsWith("_@")
+                    && !string.IsNullOrEmpty(text)
+                    && ContainsChinese(text)
+                    && !dic.ContainsKey(text))
+                {
+                    dic.Add(text, text);
+                }
+            });
 
             string path = Application.dataPath + "/PrefabTranslate.xlsx";
             if (!File.Exists(path))
@@ -48,19 +70,15 @@ namespace Translante
             }
             else
                 File.Delete(path);
-            WriteExcel(Application.dataPath + "/PrefabTranslate.xlsx", TempDic);
-            if (!File.Exists(Application.dataPath + PrefabFilePath))
-                File.Create(Application.dataPath + PrefabFilePath).Dispose();
-            File.WriteAllLines(Application.dataPath + PrefabFilePath, allPrefabList);
-            UnityEngine.Debug.Log("当前方法运行时间：" + sw.ElapsedMilliseconds);
-            sw.Stop();
+            WriteExcel(Application.dataPath + "/PrefabTranslate.xlsx", dic);
 
+            EditorUtility.ClearProgressBar();
         }
 
         /// <summary>
         /// 查找单个预制身上的lable
         /// </summary>
-        private static void ExtractFromSinglePrefab()
+        private static void ExecuteGetSingle()
         {
             var newTexts = new List<string>();
             for (int i = 0; i < m_list.Count; i++)
@@ -94,25 +112,14 @@ namespace Translante
             WriteExcel(Application.dataPath + "/Translate.xlsx", newTexts);
         }
 
-        private static void AddTranlate(UILabel uiLabel,string uipath)
-        {
-            string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
-            string subText;
-            (text, subText) = FormatTexts(text);
 
-            if (!uiLabel.name.StartsWith("_@")
-                && !string.IsNullOrEmpty(text)
-                && ContainsChinese(text)
-                && !TempDic.ContainsKey(text))
-            {
-                TempDic.Add(text, text);
-            }
-            if(!allPrefabList.Contains(uipath))
-                allPrefabList.Add(uipath);
-        }
-
+        static Dictionary<string, string> TempDic;
+        static List<string> translist;
+        static List<string> keylist;
         private static void ImportPrefabTranslate()
         {
+            Stopwatch sw = Stopwatch.StartNew();
+
             string allPath = EditorUtility.OpenFilePanel("请选择翻译好的本地化文件", "", "");
             if (!(!string.IsNullOrEmpty(allPath) && File.Exists(allPath)))
                 return;
@@ -136,58 +143,77 @@ namespace Translante
                         {
                             string key = sheet.Cells[r, 2].Value.ToString();
                             if (TempDic.ContainsKey(key)) continue;
-                            keylist.Add(key);
-                            translist.Add(sheet.Cells[r, 3].Value.ToString());
-                            TempDic.Add(key, sheet.Cells[r, 3].Value.ToString());
+                            if (sheet.Cells[r, 3].Value != null)
+                            {
+                                keylist.Add(key);
+                                translist.Add(sheet.Cells[r, 3].Value.ToString());
+                                TempDic.Add(key, sheet.Cells[r, 3].Value.ToString());
+                            }
+
                         }
 
                     }
                 }
             }
-            //TODO:读取所有本地预制
-            string[] allNeedPrefab = File.ReadAllLines(Application.dataPath + PrefabFilePath);//所有需要翻译的预制
 
             //遍历所有预制
-            string[] pathes = Directory.GetDirectories("Assets/UIPrefab");
-            for (int i = 0; i < pathes.Length; i++)
+            List<string> pathes = new List<string>
             {
-                GetPrefabsForPath<UILabel>(pathes[i], "t:Prefab", CheckTranlate);
+            "Assets/UIPrefab/UI_Basic",
+            "Assets/UIPrefab/UI_New",
+            "Assets/UIPrefab/UI_Offline"
+            };
+            for (int i = 0; i < pathes.Count; i++)
+            {
+                GetPrefabsForPath<UILabel>(pathes[i], "t:Prefab", "UIPrefab", "LN", N_CheckTranlate);
             }
 
-        }
-
-        private static void CheckTranlate(UILabel uiLabel, string path)
-        {
-            var newobj = AssetDatabase.LoadAssetAtPath<GameObject>(GetLocalizPath(path));
-            if (newobj == null)//如果不存在翻译预制，新建一个新的
-            {
-                GameObject obj = (GameObject)AssetDatabase.LoadMainAssetAtPath(path);
-                GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(obj);
-                string dir = (Application.dataPath + GetLocalizPath(path)).Replace("AssetsAssets", "Assets");
-                string[] prefabName = dir.Split('/');
-                string name = prefabName[prefabName.Length - 1];
-                string dirName = dir.Replace(name, "");
-                if (!Directory.Exists(dirName))
-                    Directory.CreateDirectory(dirName);
-                newobj = PrefabUtility.SaveAsPrefabAsset(instance, GetLocalizPath(path));//把原来的UI复制出来，到新的目录下
-            }
-
-
-            FindCompents<UILabel>(GetLocalizPath(path), uiLabel =>
-            {
-                string value = uiLabel.text;
-                if (translist.Contains(value)) return;//如果已经是翻译后的，跳过
-                if (TempDic.ContainsKey(value))//存在key，写翻译进去
-                {
-                    uiLabel.text = TempDic[value];
-                }
-                else
-                    UnityEngine.Debug.LogError("这个也妹有翻译啊: " + value);
-            });
+            GetPrefabsForPath<Text>("Assets/U", "t:Prefab", "/U/", "/LU/", U_CheckTranlate);
 
             AssetDatabase.SaveAssets();
+            UnityEngine.Debug.Log("当前方法运行时间：" + sw.ElapsedMilliseconds);
+            sw.Stop();
+
         }
 
+        private static void N_CheckTranlate(UILabel uiLabel)
+        {
+            string value = uiLabel.text;
+            if (translist.Contains(value) || string.IsNullOrEmpty(value)) return;//如果已经是翻译后的，跳过
+            if (TempDic.ContainsKey(value))//存在key，写翻译进去
+            {
+                uiLabel.text = TempDic[value];
+            }
+            //else
+            //    UnityEngine.Debug.LogError("这个也妹有翻译啊: " + value);
+        }
+
+        private static void U_CheckTranlate(Text uiLabel)
+        {
+            string value = uiLabel.text;
+            if (translist.Contains(value) || string.IsNullOrEmpty(value)) return;//如果已经是翻译后的，跳过
+            if (TempDic.ContainsKey(value))//存在key，写翻译进去
+            {
+                uiLabel.text = TempDic[value];
+            }
+            //else
+            //    UnityEngine.Debug.LogError("这个也妹有翻译啊: " + value);
+        }
+
+        private static GameObject CreateAnotherPrefab(GameObject obj, string path, string oldDirName, string newDirName)
+        {
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(obj);
+            string dir = (Application.dataPath + path.Replace(oldDirName, newDirName)).Replace("AssetsAssets", "Assets");
+            string[] prefabName = dir.Split('/');
+            string name = prefabName[prefabName.Length - 1];
+            string dirName = dir.Replace(name, "");
+            if (!Directory.Exists(dirName))
+                Directory.CreateDirectory(dirName);
+            GameObject newobj = PrefabUtility.SaveAsPrefabAsset(instance, path.Replace(oldDirName, newDirName));//把原来的UI复制出来，到新的目录下
+            if (instance != null)
+                DestroyImmediate(instance);
+            return newobj;
+        }
 
         /// <summary>
         /// 找到翻译的预制，如果找到了：对比翻译字段；没找到，创建新的。
@@ -196,7 +222,7 @@ namespace Translante
         /// <param name="filter"></param>
         /// <param name="action"></param>
         /// <typeparam name="T"></typeparam>
-        private static void GetPrefabsForPath<T>(string path, string filter, Action<T,string> action)
+        private static void GetPrefabsForPath<T>(string path, string filter, string originDir, string localizeDir, Action<T> action)
         {
             var guids = AssetDatabase.FindAssets(filter, new[] { path });
             int sum = guids.Length;
@@ -205,39 +231,34 @@ namespace Translante
             {
                 var prefabPath = AssetDatabase.GUIDToAssetPath(guid);
                 var obj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-                var uiLabels = obj.GetComponentsInChildren<T>(true);
+
+                UnityEngine.Component[] components = obj.GetComponents<UnityEngine.Component>();
+                foreach (var item in components)//判断是否有missing的脚本"ui_recruit"
+                {
+                    if (item == null)
+                        return;
+                }
+
+
+                var newobj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath.Replace(originDir, localizeDir));
+                if (newobj == null)//如果不存在翻译预制，新建一个新的
+                {
+                    newobj = CreateAnotherPrefab(obj, prefabPath, originDir, localizeDir);
+                }
+
+                var uiLabels = newobj.GetComponentsInChildren<T>(true);
                 foreach (var uiLabel in uiLabels)
                 {
-                    action.Invoke(uiLabel, prefabPath);
+                    action.Invoke(uiLabel);//prefabPath.Replace(originDir, localizeDir)
                 }
-                EditorUtility.DisplayProgressBar("正在提取预制中文", prefabPath, index / sum);
+                PrefabUtility.SavePrefabAsset(newobj);
+                EditorUtility.DisplayProgressBar("正在比对预制中文", prefabPath, index / sum);
                 index++;
             }
 
             EditorUtility.ClearProgressBar();
         }
 
-        private static string GetLocalizPath(string oldPath)
-        {
-            return oldPath.Replace("UIPrefab", "TranslateUIPrefab");
-        }
-
-
-
-        private static string GetMD5Conde(string assetPath)
-        {
-            byte[] buffer = File.ReadAllBytes(assetPath);
-            if (buffer == null || buffer.Length < 1)
-                return "";
-
-            byte[] hash = MD5Obj.ComputeHash(buffer);
-            StringBuilder sb = new StringBuilder();
-
-            foreach (var b in hash)
-                sb.Append(b.ToString("x2"));
-
-            return sb.ToString();
-        }
 
     }
 }

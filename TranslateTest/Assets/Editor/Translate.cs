@@ -13,31 +13,30 @@ namespace Translante
         static List<UnityEngine.Object> m_list;
         int? m_removeIndex;
 
-        [MenuItem("翻译/提取预制的中文")]
+        [MenuItem("翻译/提取/预制的中文")]
         public static void GetPrefabChinese()
         {
-            ExtractFromPrefab();
+            DoGetFromPrefab();
         }
 
-        [MenuItem("翻译/提取单个预制的中文")]
+        [MenuItem("翻译/提取/单个预制的中文")]
         public static void GetSinglePrefab()
         {
             Translate wnd = GetWindow<Translate>("提取单个预制的中文");
             wnd.Init();
         }
 
-        [MenuItem("翻译/提取代码的中文")]
+        [MenuItem("翻译/提取/代码的中文")]
         public static void GetCodeChinese()
         {
-            //ExcuteGetMonoScript();
+            ExcuteGetMonoScript();
         }
 
-        [MenuItem("翻译/导入/预制的翻译")]
+        [MenuItem("翻译/导入/预制翻译表格")]
         public static void ImportChinese()
         {
             ImportPrefabTranslate();
         }
-
         void Init()
         {
             m_list = new List<UnityEngine.Object>() { null };
@@ -76,7 +75,7 @@ namespace Translante
             GUILayout.Space(10);
             if (GUILayout.Button("提取预制翻译", GUILayout.Width(200)))
             {
-                ExtractFromSinglePrefab();
+                ExecuteGetSingle();
             }
 
             else if (GUILayout.Button("提取Code翻译", GUILayout.Width(200)))
@@ -156,7 +155,7 @@ namespace Translante
         /// <param name="filter"></param>
         /// <param name="action"></param>
         /// <typeparam name="T"></typeparam>
-        private static void GetComponentsForPath<T>(string path, string filter, Action<T,string> action)
+        private static void GetComponentsForPath<T>(string path, string filter, Action<T> action)
         {
             var guids = AssetDatabase.FindAssets(filter, new[] { path });
             int sum = guids.Length;
@@ -168,7 +167,7 @@ namespace Translante
                 var uiLabels = obj.GetComponentsInChildren<T>(true);
                 foreach (var uiLabel in uiLabels)
                 {
-                    action.Invoke(uiLabel, prefabPath);
+                    action.Invoke(uiLabel);
                 }
                 EditorUtility.DisplayProgressBar("正在提取预制中文", prefabPath, index / sum);
                 index++;
