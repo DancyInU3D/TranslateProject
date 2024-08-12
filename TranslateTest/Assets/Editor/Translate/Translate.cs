@@ -109,7 +109,7 @@ namespace Translante
                             string key = sheet.Cells[r, 1].Value.ToString();
                             if (existList.Contains(key))
                             {
-                                UnityEngine.Debug.Log("这个key重复了: " + key);
+                                Debug.Log("这个key重复了: " + key);
                                 count++;
                             }
                             else
