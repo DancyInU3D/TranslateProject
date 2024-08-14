@@ -5,6 +5,45 @@ using UnityEngine;
 [Serializable]
 public partial class Item_t_activity
 {
+	///<summary> 
+	 ///</summary> 
+	 public uint f_ID;
+	///<summary> 
+	 ///</summary> 
+	 public uint f_Type;
+	///<summary> 
+	 ///</summary> 
+	 public string f_Name;
+	///<summary> 
+	 ///</summary> 
+	 public string f_Relation;
+	///<summary> 
+	 ///</summary> 
+	 public string f_Pic;
+	///<summary> 
+	 ///</summary> 
+	 public string f_StartTime;
+	///<summary> 
+	 ///</summary> 
+	 public string f_BeginDate;
+	///<summary> 
+	 ///</summary> 
+	 public string f_EndDate;
+	///<summary> 
+	 ///</summary> 
+	 public string f_Detail;
+	///<summary> 
+	 ///</summary> 
+	 public uint f_Sort;
+	///<summary> 
+	 ///</summary> 
+	 public uint f_Activitytype;
+	///<summary> 
+	 ///</summary> 
+	 public string f_Remark;
+	///<summary> 
+	 ///</summary> 
+	 public string f_IconCoordinate;
 }
 
 public partial class Config_t_activity : ScriptableObject

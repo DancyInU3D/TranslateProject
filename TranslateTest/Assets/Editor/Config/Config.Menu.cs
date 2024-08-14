@@ -14,7 +14,9 @@ public partial class Config
 
         if (!EditorUtility.DisplayDialog("转换表格", "确定导入表格" + excelName + "嘛？", "confirm", "cancel"))
             return;
-
+        ConfigFile configFile = new ConfigFile(excelPath, excelName);
+        configFile.ConvertToAsset();
+        AssetDatabase.Refresh();
     }
 
     [MenuItem("Config/生成C#类")]
