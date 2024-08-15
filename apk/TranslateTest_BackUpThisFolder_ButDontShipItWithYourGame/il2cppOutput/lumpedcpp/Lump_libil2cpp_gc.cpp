@@ -1,0 +1,7 @@
+#include "il2cpp-config.h"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\BoehmGC.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\GCHandle.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\GarbageCollector.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\NullGC.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\WriteBarrier.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\gc\WriteBarrierValidation.cpp"

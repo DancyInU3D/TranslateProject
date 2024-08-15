@@ -1,0 +1,7 @@
+#include "il2cpp-config.h"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\MonoPosixHelper.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\ThreadPool\ThreadPoolMonitorThread.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\ThreadPool\ThreadPoolWorkerThread.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\ThreadPool\threadpool-ms-io-poll.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\ThreadPool\threadpool-ms-io.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\mono\ThreadPool\threadpool-ms.cpp"

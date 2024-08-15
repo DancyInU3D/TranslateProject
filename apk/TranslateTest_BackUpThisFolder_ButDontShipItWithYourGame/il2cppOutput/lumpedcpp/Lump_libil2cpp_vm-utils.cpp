@@ -1,0 +1,8 @@
+#include "il2cpp-config.h"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\BlobReader.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\Debugger.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\NativeDelegateMethodCache.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\NativeSymbol.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\VmStringUtils.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\icalls\mscorlib\System.Threading\Interlocked.cpp"
+#include "H:\Swordsman\TranslateProject\TranslateTest\HybridCLRData\LocalIl2CppData-WindowsEditor\il2cpp\libil2cpp\vm-utils\icalls\mscorlib\System\Math.cpp"
