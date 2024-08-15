@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 3455100655
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7a9dcff0a709bac12d251506ca97cb52
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/data/Assembly-CSharp.dll.bytes
+- Assets/data/UnityEngine.TestRunner.dll.bytes
+- Assets/data/HybridCLR.Runtime.dll.bytes
+- Assets/data/HotFix.dll.bytes
+- Assets/data/UnityEngine.UI.dll.bytes
+- Assets/data/Unity.Timeline.dll.bytes
+- Assets/data/Unity.TextMeshPro.dll.bytes
+Dependencies: []

@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 2793417241
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui_login
+      Dependencies: {}
+    Info_1:
+      Name: common
+      Dependencies: {}

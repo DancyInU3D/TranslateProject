@@ -50,23 +50,23 @@ namespace Translante
             }
 
             //找ngui预制中文
-            for (int i = 0; i < pathes.Count; i++)
-            {
-                GetComponentsForPath<UILabel>(pathes[i], "t:Prefab", uiLabel =>
-                {
-                    string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
-                    string subText;
-                    (text, subText) = FormatTexts(text);
+            //for (int i = 0; i < pathes.Count; i++)
+            //{
+            //    GetComponentsForPath<UILabel>(pathes[i], "t:Prefab", uiLabel =>
+            //    {
+            //        string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
+            //        string subText;
+            //        (text, subText) = FormatTexts(text);
 
-                    if (!string.IsNullOrEmpty(text)
-                        && ContainsChinese(text)
-                        && !dic.ContainsKey(text)
-                        && !existList.Contains(text))
-                    {
-                        dic.Add(text, string.Empty);
-                    }
-                });
-            }
+            //        if (!string.IsNullOrEmpty(text)
+            //            && ContainsChinese(text)
+            //            && !dic.ContainsKey(text)
+            //            && !existList.Contains(text))
+            //        {
+            //            dic.Add(text, string.Empty);
+            //        }
+            //    });
+            //}
 
             //找ugui预制中文
             GetComponentsForPath<Text>("Assets/U", "t:Prefab", uiLabel =>
@@ -120,7 +120,7 @@ namespace Translante
             {
                 UnityEngine.Object obj = m_list[i];
                 string subFolder = AssetDatabase.GetAssetPath(obj);
-                FindCompents<UILabel>(subFolder, uiLabel =>
+                FindCompents<Text>(subFolder, uiLabel =>
                 {
                     string text = uiLabel.text.Replace("\r", "\\n").Replace("\n", "\\n");
                     string subText;
@@ -194,10 +194,10 @@ namespace Translante
             "Assets/UIPrefab/UI_New",
             "Assets/UIPrefab/UI_Offline"
             };
-            for (int i = 0; i < pathes.Count; i++)
-            {
-                GetPrefabsForPath<UILabel>(pathes[i], "t:Prefab", "UIPrefab", "LN", N_CheckTranlate);
-            }
+            //for (int i = 0; i < pathes.Count; i++)
+            //{
+            //    GetPrefabsForPath<UILabel>(pathes[i], "t:Prefab", "UIPrefab", "LN", N_CheckTranlate);
+            //}
 
             GetPrefabsForPath<Text>("Assets/U", "t:Prefab", "/U/", "/LU/", U_CheckTranlate);
 
@@ -207,17 +207,17 @@ namespace Translante
 
         }
 
-        private static void N_CheckTranlate(UILabel uiLabel)
-        {
-            string value = uiLabel.text;
-            if (translist.Contains(value) || string.IsNullOrEmpty(value)) return;//如果已经是翻译后的，跳过
-            if (TempDic.ContainsKey(value))//存在key，写翻译进去
-            {
-                uiLabel.text = TempDic[value];
-            }
-            //else
-            //    UnityEngine.Debug.LogError("这个也妹有翻译啊: " + value);
-        }
+        //private static void N_CheckTranlate(UILabel uiLabel)
+        //{
+        //    string value = uiLabel.text;
+        //    if (translist.Contains(value) || string.IsNullOrEmpty(value)) return;//如果已经是翻译后的，跳过
+        //    if (TempDic.ContainsKey(value))//存在key，写翻译进去
+        //    {
+        //        uiLabel.text = TempDic[value];
+        //    }
+        //    //else
+        //    //    UnityEngine.Debug.LogError("这个也妹有翻译啊: " + value);
+        //}
 
         private static void U_CheckTranlate(Text uiLabel)
         {
