@@ -1,0 +1,5 @@
+print('mao bu yi')
+
+a=33;
+name="maomao"
+isCute=true
