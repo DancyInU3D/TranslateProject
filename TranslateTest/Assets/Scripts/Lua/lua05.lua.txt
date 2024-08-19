@@ -1,0 +1,13 @@
+person={
+Name="maobuyi",
+Age=28,
+Talk=function()
+	print("冒险精神")
+end,
+Work=function(self,a)
+	print(a.."毛雪汪")
+end
+}
+function person:Friend(a,b)
+	print(a..b)
+end
