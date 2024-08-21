@@ -31,9 +31,12 @@ public class LoadDll : MonoBehaviour
 
     private void LoadUI()
     {
+        GameObject panel = GameObject.Find("Canvas/Panel");
         AssetBundle dllAB = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/ui_login");
         GameObject asset = dllAB.LoadAsset<GameObject>("ui_login");
-        GameObject ui= Instantiate(asset);
+        GameObject ui = Instantiate(asset, panel.transform);
+
     }
+
 
 }

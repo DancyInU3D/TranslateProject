@@ -15,8 +15,10 @@ public class UI_Lua : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Fun10();
+        Fun9();
     }
+
+    #region C#访问Lua
 
     private void Fun1()
     {
@@ -161,6 +163,14 @@ public class UI_Lua : MonoBehaviour
         {
             Debug.Log(item);
         }
+
     }
-    
+    #endregion
+
+    #region Lua访问C#
+    private void Test01()
+    {
+        LuaEnv env = MyLuaBase.Require("lua08");
+    }
+    #endregion
 }
