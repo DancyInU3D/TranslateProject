@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Tencent is pleased to support the open source community by making xLua available.
  * Copyright (C) 2016 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -31,9 +31,9 @@ namespace CSObjectWrapEditor
 
         static GeneratorConfig()
         {
-            foreach(var type in (from type in XLua.Utils.GetAllTypes()
-            where type.IsAbstract && type.IsSealed
-            select type))
+            foreach (var type in (from type in XLua.Utils.GetAllTypes()
+                                  where type.IsAbstract && type.IsSealed
+                                  select type))
             {
                 foreach (var field in type.GetFields(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly))
                 {
@@ -59,6 +59,7 @@ namespace CSObjectWrapEditor
                     }
                 }
             }
+
         }
     }
 
@@ -1470,6 +1471,11 @@ namespace CSObjectWrapEditor
 
             BlackList = new List<List<string>>()
             {
+                new List<string>() { "UnityEngine.Light", "SetLightDirty" },
+                new List<string>() { "UnityEngine.Light", "shadowRadius" },
+                new List<string>() { "UnityEngine.Light", "shadowAngle" },
+                new List<string>() { "UnityEngine.Light", "shadowRadius" },
+                new List<string>() { "UnityEngine.Light", "shadowAngle" },
             };
 
             HotfixCfg = new Dictionary<Type, HotfixFlag>();
@@ -1520,6 +1526,8 @@ namespace CSObjectWrapEditor
             ReflectionUse = ReflectionUse.Distinct()
                 .Where(type => !isObsolete(type) && !type.IsGenericTypeDefinition)
                 .ToList();
+
+
         }
 
         static Dictionary<Type, int> type_size = new Dictionary<Type, int>()

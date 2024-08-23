@@ -1,17 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1680299453
+CRC: 1732053848
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9fb38c4ebe0eecea875d595e0959875c
+    Hash: 80e92371dac8a51f46c332091a61da33
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1db046d5d59b5a18a7762b575aaff427
+    Hash: af14e6e7a118bde01654b90e5c7eb597
 HashAppended: 0
 ClassTypes:
 - Class: 1
-  Script: {instanceID: 0}
-- Class: 4
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -20,14 +18,18 @@ ClassTypes:
 - Class: 48
   Script: {instanceID: 0}
 - Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 397b9bced76d80643942d5cca499d7b7, type: 3}
+  Script: {fileID: 11500000, guid: 0418ee5ec750e6746922295ab434a2e4, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: b55fc35dc9a3b294aaa22bbe114124f3, type: 3}
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
+  Script: {instanceID: 0}
+- Class: 213
   Script: {instanceID: 0}
 - Class: 222
   Script: {instanceID: 0}
@@ -37,9 +39,19 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.CoreModule
   ClassName: UnityEngine.Events.PersistentCallGroup
 - AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.FontData
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/UIPrefab/Bag/ui_login.prefab
+- Assets/UIPrefab/XLua/ui_world.prefab
 Dependencies: []

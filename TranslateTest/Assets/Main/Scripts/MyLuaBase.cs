@@ -31,7 +31,7 @@ public class MyLuaBase
 
     private static byte[] myLoader(ref string filepath)
     {
-        filepath = Application.dataPath + "/Main/Scripts/Lua/" + filepath + ".lua.txt";
+        filepath = Application.dataPath + "/Main/Lua/" + filepath + ".lua.txt";
         return File.ReadAllBytes(filepath);
     }
 }

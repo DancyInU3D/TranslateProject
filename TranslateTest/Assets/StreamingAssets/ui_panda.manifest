@@ -1,17 +1,15 @@
 ManifestFileVersion: 0
-CRC: 1680299453
+CRC: 898586717
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 9fb38c4ebe0eecea875d595e0959875c
+    Hash: 152b10feb6e243ecdbe3bae63cc4716b
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 1db046d5d59b5a18a7762b575aaff427
+    Hash: dcd13dd9fd2d9dde6cb530a4cf27c572
 HashAppended: 0
 ClassTypes:
 - Class: 1
-  Script: {instanceID: 0}
-- Class: 4
   Script: {instanceID: 0}
 - Class: 21
   Script: {instanceID: 0}
@@ -22,9 +20,7 @@ ClassTypes:
 - Class: 114
   Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
 - Class: 114
-  Script: {fileID: 11500000, guid: 397b9bced76d80643942d5cca499d7b7, type: 3}
-- Class: 114
-  Script: {fileID: 11500000, guid: b55fc35dc9a3b294aaa22bbe114124f3, type: 3}
+  Script: {fileID: 11500000, guid: 727df1e0d763d974d914ebd0a654e51e, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 128
@@ -41,5 +37,5 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
 Assets:
-- Assets/UIPrefab/Bag/ui_login.prefab
+- Assets/UIPrefab/XLua/ui_panda.prefab
 Dependencies: []
